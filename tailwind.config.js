@@ -8,7 +8,9 @@ module.exports = {
   theme: {
     colors: {
       'secondary-bg-color': '#222222',
-      'secondary-main-color': '#D7D7D7'
+      'secondary-main-color': '#D7D7D7',
+      'modal-bg-color': 'rgba(0, 0, 0, 0.315)',
+      'modal-main-color': '#ffffff'
     },
     fontFamily: {
       'heading': "var(--heading-font)"
