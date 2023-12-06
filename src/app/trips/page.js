@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Modal from "@/components/Modal";
 
 const Trips = () => {
-  const [web5, setWeb5] = useState(null);
+  const [myWeb5, setMyWeb5] = useState(null);
   const [myDid, setMyDid] = useState(null);
   const [show, setShow] = useState(false);
 
@@ -12,7 +12,10 @@ const Trips = () => {
     const initWeb5 = async () => {
       const { web5, did } = await Web5.connect();
       setMyDid(did);
-      setWeb5(web5);
+      setMyWeb5(web5);
+      if (web5 && did) {
+        await configureProtocol(web5, did);
+      }
     };
     initWeb5();
   }, [])
@@ -101,12 +104,16 @@ const Trips = () => {
     };
   };
 
+  const handleAddTrip = (name, startDate, endDate) => {
+    console.log(name, startDate, endDate);
+  }
+
   return (
     <main className="flex min-h-screen flex-col p-24">
       <div className="flex justify-between">
         <h1 className="font-heading font-bold text-3xl">Trips</h1>
         <button
-          className="border rounded px-2"
+          className="border-transparent rounded px-3 py-2 bg-primary-color text-modal-main-color"
           onClick={() => setShow(true)}
         >
           Add a new trip
@@ -115,6 +122,7 @@ const Trips = () => {
       <Modal
         show={show}
         onClose={() => setShow(false)}
+        handleAddTrip={handleAddTrip}
       />
     </main>
   )
