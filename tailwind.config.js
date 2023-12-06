@@ -7,6 +7,7 @@ module.exports = {
   ],
   theme: {
     colors: {
+      'primary-color': '#088F8F',
       'secondary-bg-color': '#222222',
       'secondary-main-color': '#D7D7D7',
       'modal-bg-color': 'rgba(0, 0, 0, 0.315)',
