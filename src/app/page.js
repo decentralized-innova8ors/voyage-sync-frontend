@@ -1,4 +1,5 @@
-import Image from 'next/image'
+import Image from 'next/image';
+import Card from '@/components/Card';
 
 export default function Home() {
   return (
@@ -51,6 +52,27 @@ export default function Home() {
       </form>
      </div>
      <Image src="/hero.jpg" alt="hero" width={600} height="50"/>
+     <p className='font-heading font-bold text-4xl my-8'>How it works</p>
+     <div className="flex gap-x-4">
+      <Card
+        title="Search for accomodation"
+        content="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis cumque, harum nihil ea odit nisi"
+        href="/hero.jpg"
+        alt="accomodation"
+      />
+      <Card
+        title="Search for flights"
+        content="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis cumque, harum nihil ea odit nisi"
+        href="/hero.jpg"
+        alt="flights"
+      />
+      <Card
+        title="Create an itinerary"
+        content="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis cumque, harum nihil ea odit nisi"
+        href="/hero.jpg"
+        alt="itinerary"
+      />
+     </div>
     </main>
   )
 }
