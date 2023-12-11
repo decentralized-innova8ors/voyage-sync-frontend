@@ -16,41 +16,7 @@ const Trips = () => {
       setMyWeb5(web5);
       if (web5 && did) {
         await configureProtocol(web5, did);
-        try {
-          const response = await web5.dwn.records.query({
-            message: {
-              filter: {
-                protocol: "https://budget-tracker-red.vercel.app/",
-                schema: "https://example.com/tripsSchema"
-              },
-              dateSort: 'createdAscending'
-            }
-          });
-          if (response.status.code === 200) {
-            const allTrips = await Promise.all(
-              response.records.map(async (record) => {
-                const data = await record.data.json();
-                return {
-                  ...data,
-                  id: record.id
-                }
-              })
-            );
-            console.log(allTrips);
-            setTripsList({ isLoading: false, data: allTrips });
-          } else {
-            console.log(response.status);
-            setTripsList({ isLoading: false, data: [] });
-          }
-          // records.map((record) => {
-          //   const data = record.data.json();
-          //   const trip = { record, data, id: record.id };
-          //   console.log('trip formatted', trip);
-          // })
-        } catch (error) {
-          console.log(error);
-          setTripsList({ isLoading: false, data: [] })
-        }
+        getRecords(web5);
       }
     };
     initWeb5();
@@ -156,6 +122,38 @@ const Trips = () => {
     };
   };
 
+  const getRecords = async (web5) => {
+    try {
+      const response = await web5.dwn.records.query({
+        message: {
+          filter: {
+            protocol: "https://budget-tracker-red.vercel.app/",
+            schema: "https://example.com/tripsSchema"
+          },
+          dateSort: 'createdDescending'
+        }
+      });
+      if (response.status.code === 200) {
+        const allTrips = await Promise.all(
+          response.records.map(async (record) => {
+            const data = await record.data.json();
+            return {
+              ...data,
+              id: record.id
+            }
+          })
+        );
+        console.log(allTrips);
+        setTripsList({ isLoading: false, data: allTrips });
+      } else {
+        console.log(response.status);
+        setTripsList({ isLoading: false, data: [] });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const handleAddTrip = async (name, startDate, endDate) => {
     console.log(name, startDate, endDate);
     const trip = {
@@ -174,16 +172,37 @@ const Trips = () => {
           recipient: myDid
         }
       })
-      const data = await record.data.json();
-      console.log('data', data);
+      if (record) {
+        getRecords(myWeb5);
+      } else {
+        throw new Error('Failed to create trip');
+      }
     } catch (error) {
       console.log(error);
     }
   }
 
-  // const displayLoading = tripsList.isLoading;
+  const handleDeleteTrip = async (id) => {
+    try {
+      const response = await myWeb5.dwn.records.delete({
+        message: {
+          recordId: id
+        }
+      });
+      if (response.status.code === 202) {
+        console.log('deleted successfully');
+        getRecords(myWeb5);
+      } else {
+        console.log(response.status);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const displayLoading = tripsList.isLoading;
   // const displayError = Boolean(!tripsList.isLoading && tripsList.error);
-  // const displayUnavailable = Boolean(!tripsList.isLoading && !tripsList?.data.length);
+  const displayUnavailable = Boolean(!tripsList.isLoading && !tripsList?.data.length);
 
   return (
     <main className="flex min-h-screen flex-col p-24">
@@ -198,26 +217,24 @@ const Trips = () => {
       </div>
       <div className="p-6">
         <div className="flex flex-col gap-y-4">
-          {tripsList.data.length > 0 ? (tripsList.data?.map((trip) => (
+          {tripsList.data?.map((trip) => (
             <div
               key={trip.id}
-              className="flex border-secondary-main-color border-2 px-4 py-10 gap-x-4"
+              className="flex border-secondary-main-color border-2 px-4 py-10 gap-x-4 justify-between"
             >
-              <p className="font-semibold">{trip.name}</p>
-              <p>{`${trip.startDate} - ${trip.endDate}`}</p>
-              <div className="flex gap-x-4">
-                <button>Edit</button>
-                <button>View</button>
-                <button>Delete</button>
+              <div>
+                <p className="font-semibold">{trip.name}</p>
+                <p>{`${trip.startDate} - ${trip.endDate}`}</p>
+              </div>
+              <div className="flex gap-x-6">
+                {/* <button className="text-primary-color">Edit</button> */}
+                <button className="hover:text-primary-color">View</button>
+                <button className="hover:text-primary-color" onClick={() => handleDeleteTrip(trip.id)}>Delete</button>
               </div>
             </div>
-          ))) : (
-            <div>
-              <p> No trips </p>
-            </div>
-          )}
+          ))}
         </div>
-        {/* {displayUnavailable && (
+        {displayUnavailable && (
           <div>
             <p> No trips </p>
           </div>
@@ -226,7 +243,7 @@ const Trips = () => {
           <div>
             <p>Loading...</p>
           </div>
-        )} */}
+        )}
       </div>
       <Modal
         show={show}

@@ -4,6 +4,7 @@ const Modal = ({ show, onClose, handleAddTrip }) => {
   const [name, setName] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  // const [itinerary, setItinerary] = useState([]);
   // const [files, setFiles] = useState([]);
 
   const handleSubmit = () => {
