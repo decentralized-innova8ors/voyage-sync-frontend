@@ -6,6 +6,13 @@ const Modal = ({ show, onClose, handleAddTrip }) => {
   const [endDate, setEndDate] = useState('');
   // const [files, setFiles] = useState([]);
 
+  const handleSubmit = () => {
+    handleAddTrip(name, startDate, endDate);
+    setName('');
+    setStartDate('');
+    setEndDate('');
+  }
+
   if (!show) {
     return null;
   }
@@ -30,7 +37,7 @@ const Modal = ({ show, onClose, handleAddTrip }) => {
           </div>
           <div className="flex gap-x-4 justify-end mt-3">
             <button className="rounded py-2 px-3 border text-primary-color bg-modal-main-color" onClick={onClose}>Cancel</button>
-            <button className="rounded py-2 px-3 border bg-primary-color text-modal-main-color" onClick={() => handleAddTrip(name, startDate, endDate)}>Add</button>
+            <button className="rounded py-2 px-3 border bg-primary-color text-modal-main-color" onClick={handleSubmit}>Add</button>
           </div>
         </div>
       </div>

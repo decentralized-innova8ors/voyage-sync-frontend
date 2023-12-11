@@ -7,6 +7,7 @@ const Trips = () => {
   const [myWeb5, setMyWeb5] = useState(null);
   const [myDid, setMyDid] = useState(null);
   const [show, setShow] = useState(false);
+  const [tripsList, setTripsList] = useState({ isLoading: true, data: [] });
 
   useEffect(() => {
     const initWeb5 = async () => {
@@ -15,10 +16,61 @@ const Trips = () => {
       setMyWeb5(web5);
       if (web5 && did) {
         await configureProtocol(web5, did);
+        try {
+          const response = await web5.dwn.records.query({
+            message: {
+              filter: {
+                protocol: "https://budget-tracker-red.vercel.app/",
+                schema: "https://example.com/tripsSchema"
+              },
+              dateSort: 'createdAscending'
+            }
+          });
+          if (response.status.code === 200) {
+            const allTrips = await Promise.all(
+              response.records.map(async (record) => {
+                const data = await record.data.json();
+                return {
+                  ...data,
+                  id: record.id
+                }
+              })
+            );
+            console.log(allTrips);
+            setTripsList({ isLoading: false, data: allTrips });
+          } else {
+            console.log(response.status);
+            setTripsList({ isLoading: false, data: [] });
+          }
+          // records.map((record) => {
+          //   const data = record.data.json();
+          //   const trip = { record, data, id: record.id };
+          //   console.log('trip formatted', trip);
+          // })
+        } catch (error) {
+          console.log(error);
+          setTripsList({ isLoading: false, data: [] })
+        }
       }
     };
     initWeb5();
-  }, [])
+  }, []);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const { records } = await myWeb5.dwn.records.query({
+  //       message: {
+  //         filter: {
+  //           protocol: "",
+  //           schema: "https://example.com/tripsSchema"
+  //         },
+  //         dateSort: 'createdAscending'
+  //       }
+  //     });
+  //     console.log('records', records);
+  //   };
+  //   fetchData();
+  // }, [])
 
   // query local protocal
   const queryLocalProtocol = async (web5) => {
@@ -104,9 +156,34 @@ const Trips = () => {
     };
   };
 
-  const handleAddTrip = (name, startDate, endDate) => {
+  const handleAddTrip = async (name, startDate, endDate) => {
     console.log(name, startDate, endDate);
+    const trip = {
+      name: name,
+      startDate: startDate,
+      endDate: endDate
+    };
+    try {
+      const tripsProtocol = defineNewProtocol();
+      const { record } = await myWeb5.dwn.records.create({
+        data: trip,
+        message: {
+          protocol: tripsProtocol.protocol,
+          protocolPath: "trips",
+          schema: tripsProtocol.types.trips.schema,
+          recipient: myDid
+        }
+      })
+      const data = await record.data.json();
+      console.log('data', data);
+    } catch (error) {
+      console.log(error);
+    }
   }
+
+  // const displayLoading = tripsList.isLoading;
+  // const displayError = Boolean(!tripsList.isLoading && tripsList.error);
+  // const displayUnavailable = Boolean(!tripsList.isLoading && !tripsList?.data.length);
 
   return (
     <main className="flex min-h-screen flex-col p-24">
@@ -118,6 +195,38 @@ const Trips = () => {
         >
           Add a new trip
         </button>
+      </div>
+      <div className="p-6">
+        <div className="flex flex-col gap-y-4">
+          {tripsList.data.length > 0 ? (tripsList.data?.map((trip) => (
+            <div
+              key={trip.id}
+              className="flex border-secondary-main-color border-2 px-4 py-10 gap-x-4"
+            >
+              <p className="font-semibold">{trip.name}</p>
+              <p>{`${trip.startDate} - ${trip.endDate}`}</p>
+              <div className="flex gap-x-4">
+                <button>Edit</button>
+                <button>View</button>
+                <button>Delete</button>
+              </div>
+            </div>
+          ))) : (
+            <div>
+              <p> No trips </p>
+            </div>
+          )}
+        </div>
+        {/* {displayUnavailable && (
+          <div>
+            <p> No trips </p>
+          </div>
+        )}
+        {displayLoading && (
+          <div>
+            <p>Loading...</p>
+          </div>
+        )} */}
       </div>
       <Modal
         show={show}
