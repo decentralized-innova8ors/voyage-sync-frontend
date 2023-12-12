@@ -1,16 +1,18 @@
 'use client'
-import { Web5 } from "@web5/api";
 import { useState, useEffect } from 'react';
-import Modal from "@/components/Modal";
+import Link from "next/link";
+import { useGlobalContext } from "../context/store";
+import Modal from '@/components/Modal';
+import { v4 as uuidv4 } from 'uuid';
 
 const Trips = () => {
-  const [myWeb5, setMyWeb5] = useState(null);
-  const [myDid, setMyDid] = useState(null);
+  const { setMyDid, myWeb5, setMyWeb5 } = useGlobalContext();
   const [show, setShow] = useState(false);
   const [tripsList, setTripsList] = useState({ isLoading: true, data: [] });
 
   useEffect(() => {
     const initWeb5 = async () => {
+      const { Web5 } = await import("@web5/api/browser")
       const { web5, did } = await Web5.connect();
       setMyDid(did);
       setMyWeb5(web5);
@@ -22,21 +24,7 @@ const Trips = () => {
     initWeb5();
   }, []);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const { records } = await myWeb5.dwn.records.query({
-  //       message: {
-  //         filter: {
-  //           protocol: "",
-  //           schema: "https://example.com/tripsSchema"
-  //         },
-  //         dateSort: 'createdAscending'
-  //       }
-  //     });
-  //     console.log('records', records);
-  //   };
-  //   fetchData();
-  // }, [])
+
 
   // query local protocal
   const queryLocalProtocol = async (web5) => {
@@ -154,22 +142,29 @@ const Trips = () => {
     }
   }
 
-  const handleAddTrip = async (name, startDate, endDate) => {
-    console.log(name, startDate, endDate);
+  const handleAddTrip = async (values) => {
+    const updatedItinerary = values.itinerary.map((option) => {
+      const properties = {
+        title: option.title,
+        notes: option.notes,
+        id: uuidv4()
+      }
+      return properties;
+    })
     const trip = {
-      name: name,
-      startDate: startDate,
-      endDate: endDate
+      name: values.name,
+      startDate: values.startDate,
+      endDate: values.endDate,
+      itinerary: updatedItinerary
     };
+    console.log('trip', trip);
     try {
-      const tripsProtocol = defineNewProtocol();
       const { record } = await myWeb5.dwn.records.create({
         data: trip,
         message: {
-          protocol: tripsProtocol.protocol,
+          protocol: "https://budget-tracker-red.vercel.app/",
           protocolPath: "trips",
-          schema: tripsProtocol.types.trips.schema,
-          recipient: myDid
+          schema: "https://example.com/tripsSchema",
         }
       })
       if (record) {
@@ -228,7 +223,9 @@ const Trips = () => {
               </div>
               <div className="flex gap-x-6">
                 {/* <button className="text-primary-color">Edit</button> */}
-                <button className="hover:text-primary-color">View</button>
+                <button className="hover:text-primary-color">
+                  <Link href={`trips/${trip.id}`}>View</Link>
+                </button>
                 <button className="hover:text-primary-color" onClick={() => handleDeleteTrip(trip.id)}>Delete</button>
               </div>
             </div>
