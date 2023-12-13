@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useGlobalContext } from "../context/store";
 import Modal from '@/components/Modal';
 import { v4 as uuidv4 } from 'uuid';
+import Skeleton from '@/components/Skeleton';
 
 const Trips = () => {
   const { setMyDid, myWeb5, setMyWeb5 } = useGlobalContext();
@@ -207,7 +208,7 @@ const Trips = () => {
           className="border-transparent rounded px-3 py-2 bg-primary-color text-modal-main-color"
           onClick={() => setShow(true)}
         >
-          Add a new trip
+          Plan a new trip
         </button>
       </div>
       <div className="p-6">
@@ -237,9 +238,7 @@ const Trips = () => {
           </div>
         )}
         {displayLoading && (
-          <div>
-            <p>Loading...</p>
-          </div>
+          <Skeleton />
         )}
       </div>
       <Modal

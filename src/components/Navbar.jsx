@@ -1,12 +1,36 @@
-import Link from "next/link"
+'use client'
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+const navlinks = [
+  {
+    id: 1,
+    href: "/",
+    name: "Home"
+  },
+  {
+    id: 2,
+    href: "/trips",
+    name: "Trips"
+  }
+];
 
 const Navbar = () => {
+  const pathname = usePathname();
   return (
     <nav className="px-24 pt-12 flex justify-between">
       <p>LOGO</p>
       <ul className="flex gap-x-8">
-        <li><Link href="/" className="hover:underline">Home</Link></li>
-        <li><Link href="/trips" className="hover:underline">Trips</Link></li>
+        {navlinks.map((link) => {
+          const isActive = pathname.startsWith(link.href)
+          return (
+            <li key={link.id}>
+              <Link href={link.href} className={isActive ? "text-primary-color font-semibold" : "text-secondary-bg-color font-semibold"}>
+                {link.name}
+              </Link>
+            </li>
+          )
+        })}
       </ul>
     </nav>
   )

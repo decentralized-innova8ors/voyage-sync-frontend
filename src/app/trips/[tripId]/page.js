@@ -1,7 +1,8 @@
 'use client';
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Tab } from '@headlessui/react'
+import { Tab } from '@headlessui/react';
+import Skeleton from "@/components/Skeleton";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -63,15 +64,15 @@ const Trip = () => {
         <div>
           <p className="my-3 font-heading font-bold text-xl">Itinerary</p>
           {trip.data?.itinerary?.length > 0 ? (<Tab.Group>
-            <Tab.List className="flex space-x-1 rounded-xl bg-secondary-bg-color p-1 mb-3">
+            <Tab.List className="flex space-x-1 rounded-xl bg-secondary-main-color p-1 mb-3">
               {trip.data?.itinerary?.map((item) => (
                 <Tab key={item.id} className={({ selected }) =>
                 classNames(
                   'w-full rounded-lg py-2.5 text-sm font-medium leading-5',
                   'ring-secondary-main-color/60 ring-offset-2 ring-offset-secondary-main-color focus:outline-none focus:ring-2',
                   selected
-                    ? 'bg-secondary-bg-color text-secondary-main-color shadow'
-                    : 'text-secondary-bg-color hover:bg-secondary-main-color/[0.12] hover:text-secondary-main-color'
+                    ? 'bg-primary-color text-modal-main-color shadow'
+                    : 'text-modal-main-color hover:bg-primary-color hover:text-modal-main-color'
                 )
               }>
                   {item.title}
@@ -98,9 +99,7 @@ const Trip = () => {
         </div>
       )}
       {displayLoading && (
-        <div>
-          <p>Loading....</p>
-        </div>
+        <Skeleton />
       )}
     </div>
   )
