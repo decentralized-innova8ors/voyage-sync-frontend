@@ -3,7 +3,7 @@ const Footer = () => {
     <footer className="px-24 py-12 bg-secondary-bg-color text-secondary-main-color">
       <div className="flex justify-between">
         <div>
-          <p className="">LOGO</p>
+          <p className="italic">VoyageSync</p>
           <p className="text-sm">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis cumque, harum nihil ea odit nisi</p>
         </div>
         <div>
