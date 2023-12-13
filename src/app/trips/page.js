@@ -14,7 +14,7 @@ const Trips = () => {
   useEffect(() => {
     const initWeb5 = async () => {
       const { Web5 } = await import("@web5/api/browser")
-      const { web5, did } = await Web5.connect();
+      const { web5, did } = await Web5.connect({ sync: "5s" });
       setMyDid(did);
       setMyWeb5(web5);
       if (web5 && did) {

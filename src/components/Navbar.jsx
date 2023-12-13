@@ -19,7 +19,7 @@ const Navbar = () => {
   const pathname = usePathname();
   return (
     <nav className="px-24 pt-12 flex justify-between">
-      <p>LOGO</p>
+      <p className="italic">VoyageSync</p>
       <ul className="flex gap-x-8">
         {navlinks.map((link) => {
           const isActive = pathname.startsWith(link.href)

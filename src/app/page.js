@@ -51,25 +51,25 @@ export default function Home() {
           placeholder='Places to visit, Things to do, Restaurants...'/>
       </form>
      </div>
-     <Image src="/hero.jpg" alt="hero" width={600} height="50"/>
+     <Image src="/illustration_04.svg" alt="hero" width={600} height="50"/>
      <p className='font-heading font-bold text-4xl my-8'>How it works</p>
      <div className="flex gap-x-4">
       <Card
         title="Search for accomodation"
         content="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis cumque, harum nihil ea odit nisi"
-        href="/hero.jpg"
+        href="/illustration_01.svg"
         alt="accomodation"
       />
       <Card
         title="Search for flights"
         content="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis cumque, harum nihil ea odit nisi"
-        href="/hero.jpg"
+        href="/illustration_02.svg"
         alt="flights"
       />
       <Card
         title="Create an itinerary"
         content="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis cumque, harum nihil ea odit nisi"
-        href="/hero.jpg"
+        href="/illustration_03.svg"
         alt="itinerary"
       />
      </div>
