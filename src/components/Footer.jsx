@@ -4,7 +4,7 @@ const Footer = () => {
       <div className="flex justify-between">
         <div>
           <p className="italic">VoyageSync</p>
-          <p className="text-sm">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis cumque, harum nihil ea odit nisi</p>
+          <p className="text-sm">Unlock limitless adventures with Voyage Sync - Your ultimate travel companion</p>
         </div>
         <div>
           <p className="font-semibold mb-2">About</p>
@@ -31,7 +31,7 @@ const Footer = () => {
             </li>
           </ul>
         </div>
-        <div>
+        {/* <div>
           <p className="font-semibold mb-2">Socials</p>
           <ul className="text-sm flex flex-col gap-y-2">
             <li>
@@ -47,7 +47,7 @@ const Footer = () => {
               Facebook
             </li>
           </ul>
-        </div>
+        </div> */}
       </div>
       <hr className="my-4"/>
       <div className="flex justify-between">
