@@ -21,7 +21,7 @@ const Navbar = () => {
   return (
     <nav className="px-24 pt-12 flex justify-between">
       <p className="italic">VoyageSync</p>
-      {/* <Image src="/logo.jpeg" width={100} height={50} alt="logo" /> */}
+      {/* <Image src="/logo.png" width={100} height={50} alt="logo" /> */}
       <ul className="flex gap-x-8">
         {navlinks.map((link) => {
           const isActive = pathname.startsWith(link.href)

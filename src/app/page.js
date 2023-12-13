@@ -62,21 +62,19 @@ export default function Home() {
      <div className="flex gap-x-4">
       <Card
         title="Search for accomodation"
-        content="Explore and book accommodations seamlessly on Voyage Sync—your ultimate travel companion. 
-        Find your perfect stay anywhere in the world, effortlessly."
+        content="Find your perfect stay anywhere in the world, effortlessly."
         href="/illustration_01.svg"
         alt="accomodation"
       />
       <Card
         title="Search for flights"
-        content="Discover seamless flight bookings worldwide on Voyage Sync.
-        Find and book your ideal flight with ease and confidence, all in one place."
+        content="Find and book your ideal flight with ease and confidence, all in one place."
         href="/illustration_02.svg"
         alt="flights"
       />
       <Card
         title="Create an itinerary"
-        content="Craft your perfect journey effortlessly on Voyage Sync. Build personalized itineraries with ease, tailored to your travel aspirations."
+        content="Build personalized itineraries with ease, tailored to your travel aspirations."
         href="/illustration_03.svg"
         alt="itinerary"
       />
